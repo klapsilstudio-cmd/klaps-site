@@ -88,7 +88,12 @@ pricing:[{id:"r1",type:"TikTok / Reels / Shorts",price:"החל מ-₪299"},{id:"
 faq:[{id:"f1",q:"כמה עולה עריכת וידאו?",a:"המחיר תלוי בסוג הסרטון ובאורכו. ראו את המחירון והחבילות, או בקשו הצעה."},{id:"f2",q:"האם המחיר כולל תיקונים?",a:"כן, מספר התיקונים מצוין בכל חבילה."},{id:"f3",q:"האם אפשר חבילה מותאמת אישית?",a:"בהחלט. פנו אלינו ונבנה הצעה לפי הצורך."}],
 coupons:[],reviews:[],requests:[],social:[{id:"o1",name:"Instagram",url:"",active:"כן"},{id:"o2",name:"TikTok",url:"",active:"כן"},{id:"o3",name:"YouTube",url:"",active:"כן"}]};
 let S;try{S=JSON.parse(LS.g("klaps_v2"))}catch(e){}if(!S)S=JSON.parse(JSON.stringify(SEED));for(const k in SEED)S[k]??=SEED[k];
-const save=()=>LS.s("klaps_v2",JSON.stringify(S));
+/* ===== CFG: סנכרון תוכן משותף לכל המשתמשים =====
+   CFG.api = כתובת ה-Worker (ראו worker.js). ריק = מצב מקומי בלבד. */
+const CFG={db:'https://klaps-fd805-default-rtdb.firebaseio.com',key:'AIzaSyBT5lzhB912P2uGM9Q5NlRWP1664hRZLt4',admin:'klaps.il.studio@gmail.com'};
+let pt;const push=()=>{if(!CFG.api||sessionStorage.getItem("klaps_s")!=="1")return;clearTimeout(pt);pt=setTimeout(async()=>{let k=LS.g("klaps_ak");if(!k){k=prompt("מפתח סנכרון (ADMIN_KEY) לפרסום השינויים לכל המשתמשים:");if(!k){toast("נשמר רק אצלך – חסר מפתח סנכרון");return}LS.s("klaps_ak",k)}const o={};CFG.pub.forEach(x=>o[x]=S[x]);try{const r=await fetch(CFG.api,{method:"PUT",headers:{"Content-Type":"application/json","X-Admin-Key":k},body:JSON.stringify(o)});if(r.status==401){try{localStorage.removeItem("klaps_ak")}catch(e){}toast("מפתח סנכרון שגוי")}else if(!r.ok)throw 0;else toast("פורסם לכל המשתמשים ✓")}catch(e){toast("הפרסום לשרת נכשל – נשמר מקומית בלבד")}},600)};
+const save=()=>{LS.s("klaps_v2",JSON.stringify(S));push()};
+async function pull(){if(!CFG.api)return;try{const r=await fetch(CFG.api,{cache:"no-store"});if(!r.ok)return;const d=await r.json();let c=0;CFG.pub.forEach(k=>{if(d[k]!==undefined){S[k]=d[k];c=1}});if(c){LS.s("klaps_v2",JSON.stringify(S));col();if(view!=="admin")route()}}catch(e){}}
 /* ===== לוגיקת מחירים וקופונים ===== */
 const dOn=p=>+p.old>+p.price&&(!p.ds||p.ds<=today())&&(!p.de||p.de>=today());
 const cur=p=>dOn(p)?+p.price:(+p.old||+p.price),pct=p=>Math.round((1-p.price/p.old)*100);
@@ -229,5 +234,5 @@ $("#ef").onsubmit=e=>{e.preventDefault();const n=i>=0?o:{id:uid()};c.f.forEach(f
 const upd=()=>{tk=0;const mx=R.scrollHeight-innerHeight,y=scrollY;sp.style.transform=`scaleX(${mx>0?y/mx:0})`;const hd=$("header");hd&&hd.classList.toggle("sc",y>40);let c="";$$("main section[id]").forEach(s=>{if(s.getBoundingClientRect().top<innerHeight*.4)c=s.id});$$("#links a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")=="#"+c))};
 addEventListener("scroll",()=>{tk||(tk=requestAnimationFrame(upd))},{passive:true});
 if(matchMedia("(hover:hover) and (pointer:fine)").matches&&!matchMedia("(prefers-reduced-motion:reduce)").matches)addEventListener("pointermove",e=>{cu.style.opacity=1;cu.style.transform=`translate(${e.clientX}px,${e.clientY}px)`},{passive:true})})();
-function col(){R.style.setProperty("--p",S.settings.c1);R.style.setProperty("--b",S.settings.c2)}col();route();
+function col(){R.style.setProperty("--p",S.settings.c1);R.style.setProperty("--b",S.settings.c2)}col();route();pull();
 </script></body></html>
