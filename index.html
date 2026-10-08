@@ -525,9 +525,23 @@ dialog::backdrop{background:rgba(20,19,18,.55);-webkit-backdrop-filter:blur(8px)
  .ct form.f{padding:22px 18px}
  .pkc .row{flex-direction:column}
 }
+</style><style id="klaps-motion">/* KLAPS motion layer — additive only, no visual redesign */
+.kx{opacity:0;transform:translateY(26px) scale(.985);filter:blur(8px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1),filter .9s;transition-delay:var(--kd,0ms);will-change:transform,opacity}
+.kx.in{opacity:1;transform:none;filter:none}
+.kt{transform-style:preserve-3d;transition:transform .25s ease-out;will-change:transform}
+.kg{position:relative;overflow:hidden}
+.kg::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.12),transparent 60%)}
+.kg:hover::after{opacity:1}
+.btn{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .3s,background .3s}
+dialog[open]{animation:kdi .45s cubic-bezier(.2,.8,.2,1)}
+dialog::backdrop{animation:kbd .4s both;backdrop-filter:blur(6px)}
+@keyframes kdi{from{opacity:0;transform:translateY(24px) scale(.96);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@keyframes kbd{from{opacity:0}to{opacity:1}}
+@media(max-width:640px){dialog[open]{animation:kdm .4s cubic-bezier(.2,.8,.2,1)}@keyframes kdm{from{transform:translateY(100%)}to{transform:none}}}
+@media(prefers-reduced-motion:reduce){.kx{opacity:1;transform:none;filter:none;transition:none}.kt,.btn{transition:none;transform:none!important}dialog[open],dialog::backdrop{animation:none}}
 </style></head><body>
 <a class="skip" href="#main">דלג לתוכן הראשי</a><div id="app"></div>
-<div id="a11y"><button class="btn ico" id="ab" aria-label="תפריט נגישות" aria-expanded="false">♿︎</button><div id="pn" role="group" aria-label="כלי נגישות"><button class="btn sm" data-a="inc">A+ הגדל טקסט</button><button class="btn sm" data-a="dec">A− הקטן טקסט</button><button class="btn sm" data-a="hc">ניגודיות גבוהה</button><button class="btn sm" data-a="ul">הדגשת קישורים</button><button class="btn sm" data-a="rm">עצירת אנימציות</button><button class="btn sm" data-a="reset">איפוס</button></div></div>
+<div id="a11y"><button class="btn ico" id="ab" aria-label="תפריט נגישות" aria-expanded="false">♿</button><div id="pn" role="group" aria-label="כלי נגישות"><button class="btn sm" data-a="inc">A+ הגדל טקסט</button><button class="btn sm" data-a="dec">A− הקטן טקסט</button><button class="btn sm" data-a="hc">ניגודיות גבוהה</button><button class="btn sm" data-a="ul">הדגשת קישורים</button><button class="btn sm" data-a="rm">עצירת אנימציות</button><button class="btn sm" data-a="reset">איפוס</button></div></div>
 <dialog id="dlg"><div class="db"><button class="btn sm x" id="dx" aria-label="סגירה">✕</button><div id="dc"></div></div></dialog>
 <div id="cookie" role="dialog" aria-label="עוגיות" hidden><p style="margin:0 0 10px">האתר משתמש בעוגיות חיוניות בלבד לתפעולו. פרטים ב<a href="#" data-d="privacy">מדיניות הפרטיות</a>.</p><div class="row"><button class="btn pri sm" data-c="1">אישור</button><button class="btn sm" data-c="0">חיוניות בלבד</button></div></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -538,8 +552,8 @@ dialog::backdrop{background:rgba(20,19,18,.55);-webkit-backdrop-filter:blur(8px)
    adminEmail = האימייל של משתמש המנהל שנוצר ב-Authentication (Email/Password)
    ===================================================================== */
 const CFG={
-  firebase:{apiKey:"",authDomain:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""},
-  adminEmail:"",
+  firebase:{apiKey:"AIzaSyBT5lzhB912P2uGM9Q5NlRWP1664hRZLt4",authDomain:"klaps-fd805.firebaseapp.com",projectId:"klaps-fd805",storageBucket:"klaps-fd805.firebasestorage.app",messagingSenderId:"262286614703",appId:"1:262286614703:web:1892ac8da71d30bbdcf45a"},
+  adminEmail:"klaps.il.studio@gmail.com",
   sdk:"https://www.gstatic.com/firebasejs/10.12.2/"
 };
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],R=document.documentElement;
@@ -550,14 +564,14 @@ const LOGO="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAA
 const BR=()=>`<a class="brand" href="#/" aria-label="KLAPS"><img src="${LOGO}" alt=""><span aria-hidden="true">LAPS</span></a>`;
 const PUB=["settings","services","packages","portfolio","pricing","faq","social","team"];
 const pick=(o,ks)=>{const r={};ks.forEach(k=>r[k]=o[k]);return r};
-const SEED={settings:{h1:"העריכה שמביאה את התוכן שלך לרמה הבאה",email:"",phone:"",loc:"ישראל",wa:"",c1:"#8C7652",c2:"#5B6670",years:"3",promo:"KLAPSBIO",promoPct:"15"},
-services:[{id:"s1",title:"TikTok",desc:"עריכת שורטים איכותיים בקצב של הפלטפורמה.",color:"#ff2d75"},{id:"s2",title:"YouTube Shorts",desc:"קאטים חדים וכתוביות שמחזיקים צופים.",color:"#ff3b3b"},{id:"s3",title:"Reels",desc:"ריל שנראה כמו מותג.",color:"#c13584"},{id:"s4",title:"עריכת YouTube",desc:"מפתיח ועד סיום, צבע וסאונד.",color:"#2563eb"},{id:"s5",title:"תוכן עסקי",desc:"סרטונים שמציגים את העסק כמו שצריך.",color:"#7c3aed"},{id:"s6",title:"פרסומות",desc:"קמפיינים שנועדו להמיר.",color:"#0891b2"}],
-packages:[{id:"p1",name:"בסיסית",short:"סרטון קצר עד 60 שניות, עריכה וכתוביות.",price:399,old:500,ds:"",de:"",tags:"חדש,טיקטוק",incl:"עד 60 שניות\nכתוביות\nסאונד וצבע",delivery:"בין 1-3 ימי עסקים",rev:"2",img:"",status:"published"},{id:"p2",name:"פריומיום",short:"4 סרטונים מקצועיים.",price:1499,old:1750,ds:"",de:"",tags:"מומלץ,ריילס,שורטס",incl:"4 סרטונים קצרים\nצבע וסאונד\nתיקונים לכל סרטון",delivery:"בין 7-14 ימי עסקים",rev:"3",img:"",status:"published"},{id:"p3",name:"אולטימיט",short:"8 סרטונים מקצועיים.",price:1990,old:2100,ds:"",de:"",tags:"פרימיום,פרסומות,אולטמיט",incl:"\nגרפיקה ואנימציה\nליווי אישי",delivery:"בין 7-21 ימי עסקים",rev:"3",img:"",status:"published"}],
+const SEED={settings:{h1:"העריכה שמביאה את התוכן שלך לרמה הבאה",sub:"עריכה עם האדיטורים הכי גדולים בארץ",line:"מהירות, איכות והתאמה לכל פלטפורמה. תוכן שנעצר עליו בגלילה.",email:"",phone:"",loc:"ישראל",wa:"",c1:"#8C7652",c2:"#5B6670",years:"3",promo:"KLAPSBIO",promoPct:"15"},
+services:[{id:"s1",title:"TikTok",desc:"עריכת Short-form בקצב של הפלטפורמה.",color:"#ff2d75"},{id:"s2",title:"YouTube Shorts",desc:"קאטים חדים וכתוביות שמחזיקים צופים.",color:"#ff3b3b"},{id:"s3",title:"Reels",desc:"ריל שנראה כמו מותג.",color:"#c13584"},{id:"s4",title:"עריכת YouTube",desc:"מפתיח ועד סיום, צבע וסאונד.",color:"#2563eb"},{id:"s5",title:"תוכן עסקי",desc:"סרטונים שמציגים את העסק כמו שצריך.",color:"#7c3aed"},{id:"s6",title:"פרסומות",desc:"קמפיינים שנועדו להמיר.",color:"#0891b2"}],
+packages:[{id:"p1",name:"Starter",short:"סרטון קצר עד 60 שניות, עריכה וכתוביות.",price:399,old:500,ds:"",de:"",tags:"New,TikTok",incl:"עד 60 שניות\nכתוביות\nסאונד וצבע",delivery:"2-3 ימים",rev:"2",img:"",status:"published"},{id:"p2",name:"Creator",short:"4 סרטונים בחודש ליוצרים.",price:1290,old:1600,ds:"",de:"",tags:"Recommended,Reels,Shorts",incl:"4 סרטונים קצרים\nצבע וסאונד\nתיקונים לכל סרטון",delivery:"3-4 ימים",rev:"3",img:"",status:"published"},{id:"p3",name:"Business",short:"סרטון תדמית או פרסומת עד 3 דקות.",price:1900,old:0,ds:"",de:"",tags:"Premium,Ads,Business",incl:"עד 3 דקות\nגרפיקה ואנימציה\nליווי אישי",delivery:"5-7 ימים",rev:"3",img:"",status:"published"}],
 portfolio:[{id:"w1",title:"סרטון מותג — אופנה",desc:"",cat:"TikTok",tags:"Premium",client:"",video:"",thumb:"",status:"published"},{id:"w2",title:"קמפיין מסעדה",desc:"",cat:"Ads",tags:"Advertisement",client:"",video:"",thumb:"",status:"published"},{id:"w3",title:"וולוג טיולים",desc:"",cat:"YouTube",tags:"",client:"",video:"",thumb:"",status:"published"}],
 pricing:[{id:"r1",type:"TikTok / Reels / Shorts",price:"החל מ-₪299"},{id:"r2",type:"סרטון YouTube",price:"החל מ-₪600"},{id:"r3",type:"פרסומת",price:"החל מ-₪900"},{id:"r4",type:"סרטון תדמית",price:"החל מ-₪1,500"},{id:"r5",type:"עריכה מותאמת אישית",price:"בהצעת מחיר"}],
 faq:[{id:"f1",q:"כמה עולה עריכת וידאו?",a:"המחיר תלוי בסוג הסרטון ובאורכו. ראו את המחירון והחבילות, או בקשו הצעה."},{id:"f2",q:"האם המחיר כולל תיקונים?",a:"כן, מספר התיקונים מצוין בכל חבילה."},{id:"f3",q:"האם אפשר חבילה מותאמת אישית?",a:"בהחלט. פנו אלינו ונבנה הצעה לפי הצורך."}],
 social:[{id:"o1",name:"Instagram",url:"",icon:"",active:"כן"},{id:"o3",name:"YouTube",url:"",icon:"",active:"כן"},{id:"o2",name:"TikTok",url:"",icon:"",active:"כן"}],
-team:[{id:"t1",name:"Kiali.aep",role:"מייסד שותף · עריכה ומושן",bio:"קצב, מעברים ואנימציה שהופכים כל סרטון לחוויה.",url:"https://share.google/yKqpjF4HVdR9JaOKn",img:"",active:"כן"},{id:"t3",name:"Proplayer",role:"מייסד שותף · פוסט-פרודקשן ואפקטים",bio:"צבע, סאונד ואפקטים בסטנדרט של הפקה גדולה.",url:"https://www.tiktok.com/@proplayer.ae?_r=1&_t=ZS-9AJcmpqs0iz",img:"",active:"כן"},{id:"t2",name:"Liroy.c",role:"מייסד שותף · עריכה ואסטרטגיה",bio:"בונה את ההוק, הנרטיב והמבנה שמחזיקים את הצופה.",url:"https://www.tiktok.com/@liroy.c?_r=1&_t=ZS-9AJcl8Z5RSP",img:"",active:"כן"}]};
+team:[{id:"t1",name:"Kiali.aep",role:"מייסד שותף · עריכה ומושן",bio:"קצב, מעברים ואנימציה שהופכים כל סרטון לחוויה.",url:"https://share.google/yKqpjF4HVdR9JaOKn",img:"",active:"כן"},{id:"t3",name:"Proplayer",role:"מייסד שותף · פוסט-פרודקשן ואפקטים",bio:"צבע, סאונד ואפקטים בסטנדרט של הפקה גדולה.",url:"https://www.tiktok.com/@proplayer.ae?_r=1&_t=ZS-9AJcmpqs0iz",img:"",active:"כן"},{id:"t2",name:"Liroy.c",role:"מייסד שותף · סטוריטלינג ואסטרטגיה",bio:"בונה את ההוק, הנרטיב והמבנה שמחזיקים את הצופה.",url:"https://www.tiktok.com/@liroy.c?_r=1&_t=ZS-9AJcl8Z5RSP",img:"",active:"כן"}]};
 /* S = התוכן הציבורי (נטען מ-Firestore ומתעדכן בזמן אמת). מטמון מקומי רק להצגה מהירה בטעינה */
 const S=JSON.parse(JSON.stringify(SEED));S.coupons=[];S.reviews=[];
 try{const c=JSON.parse(LS.g("klaps_cache"));if(c)PUB.forEach(k=>{if(c[k]!==undefined)S[k]=c[k]})}catch(e){}
@@ -717,8 +731,8 @@ $("#app").innerHTML=`${promoX||!BIO||!pc?"":`<div class="promo hot" id="promo" r
 ${BIO&&pc?`<a class="disc" href="#contact" data-promo="go" data-par=".09" aria-label="הנחה בלעדית למגיעים מהביו"><svg viewBox="0 0 132 132" aria-hidden="true"><defs><path id="rg" d="M66,66 m-50,0 a50,50 0 1,1 100,0 a50,50 0 1,1 -100,0"/></defs><text><textPath href="#rg">${ring}</textPath></text></svg><b aria-hidden="true">%</b></a>`:""}
 <div class="chip" data-par=".02" aria-hidden="true"><img src="${ICONS.tiktok}" alt=""><span class="ltr">Shorts · Reels · TikTok · YouTube</span></div></div></div></section>
 <div class="mq" aria-hidden="true"><div class="tr"><span>${mqItems}</span><span>${mqItems}</span></div></div>
-<section id="about"><div class="wrap rev"><div class="ab"><div class="ab-t"><div class="eye">OUR STORY</div><h2>שלושה עורכים. רמה גבוה תוכן איכותי.</h2>
-<p>Klaps נוסדה על ידי שלושה עורכים — <strong class="ltr">Kiali.aep</strong>, <strong class="ltr">Proplayer</strong> ו-<strong class="ltr">Liroy.c</strong>שנמנים עם העורכים המוכרים בישראל. , עם יוצרים, ובעלי עסקים, הבנו שעריכה טובה היא הרבה יותר .</p>
+<section id="about"><div class="wrap rev"><div class="ab"><div class="ab-t"><div class="eye">OUR STORY</div><h2>שלושה עורכים. שפה אחת שעוצרת גלילה.</h2>
+<p>Klaps נוסדה על ידי שלושה עורכים — <strong class="ltr">Kiali.aep</strong>, <strong class="ltr">Proplayer</strong> ו-<strong class="ltr">Liroy.c</strong> — שנמנים עם העורכים המוכרים והמבוקשים בישראל. אחרי יותר מ-${H(s.years)} שנים בשטח, עם יוצרים, מותגים ועסקים, הבנו שעריכה טובה היא הרבה יותר מחיתוך.</p>
 <p>אנחנו מגיעים עם אסטרטגיה קריאייטיבית מלאה: מסגור נרטיבי, בניית הוק וקצב, וסטוריטלינג ויזואלי שמותאם לכל פלטפורמה — Shorts, Reels, TikTok ו-YouTube.</p>
 <div class="exp"><span class="serif-num ltr">${H(s.years)}<sup>+</sup></span><span>שנות ניסיון בעריכת תוכן ליוצרים, מותגים ועסקים מובילים</span></div></div>
 ${TM.length?`<div class="team">${TM.map(t=>{const tag=t.url?"a":"div",im=img(t.img);return`<${tag} class="fd" ${t.url?`href="${H(t.url)}" target="_blank" rel="noopener" aria-label="${H(t.name)} — פרופיל"`:'tabindex="0"'}><div class="pt">${im?`<img src="${H(im)}" alt="${H(t.name)}" loading="lazy">`:`<span class="mono" aria-hidden="true">${H(String(t.name||"?").trim().charAt(0))}</span>`}<div class="ov"><small>${H(t.role)}</small><div class="bio">${H(t.bio)}</div></div></div><div class="hdl"><span>@${H(String(t.name||"").replace(/^@/,""))}</span>${ARW}</div></${tag}>`}).join("")}</div>`:""}</div>
@@ -929,4 +943,20 @@ addEventListener("scroll",()=>{tk||(tk=requestAnimationFrame(upd))},{passive:tru
 })();
 function col(){const c1=String(S.settings.c1||"").toLowerCase(),c2=String(S.settings.c2||"").toLowerCase();R.style.setProperty("--p",!c1||c1==="#4f46e5"||c1==="#b4532a"?"#8C7652":c1);R.style.setProperty("--b",!c2||c2==="#2563eb"?"#5B6670":c2)}
 col();route();const fbReady=fbInit();
+</script>
+<script id="klaps-motion-js">(()=>{const rm=matchMedia("(prefers-reduced-motion:reduce)").matches,fine=matchMedia("(hover:hover)").matches;
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+function scan(r){r=r||document;
+ r.querySelectorAll("main section").forEach(s=>{[...s.querySelectorAll(":scope > .wrap > *, .card, .pk, [class*=card]")].forEach((el,i)=>{if(el.dataset.k)return;el.dataset.k=1;el.classList.add("kx");el.style.setProperty("--kd",Math.min(i,8)*70+"ms");rm?el.classList.add("in"):io.observe(el)})});
+ if(rm||!fine)return;
+ r.querySelectorAll(".card,.pk,[class*=card]").forEach(c=>{if(c.dataset.t)return;c.dataset.t=1;c.classList.add("kt","kg");
+  c.addEventListener("pointermove",e=>{const b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width,y=(e.clientY-b.top)/b.height;c.style.setProperty("--mx",x*100+"%");c.style.setProperty("--my",y*100+"%");c.style.transform=`perspective(900px) rotateY(${(x-.5)*6}deg) rotateX(${(.5-y)*6}deg)`});
+  c.addEventListener("pointerleave",()=>c.style.transform="")});
+ r.querySelectorAll(".btn.pri").forEach(b=>{if(b.dataset.m)return;b.dataset.m=1;
+  b.addEventListener("pointermove",e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.12}px,${(e.clientY-r.top-r.height/2)*.2}px)`});
+  b.addEventListener("pointerleave",()=>b.style.transform="")})}
+function count(){document.querySelectorAll(".stats b,.stats strong").forEach(n=>{if(n.dataset.c)return;const m=n.textContent.match(/\d+/);if(!m||rm)return;n.dataset.c=1;const to=+m[0],pre=n.textContent.slice(0,m.index),suf=n.textContent.slice(m.index+m[0].length);
+ new IntersectionObserver((es,o)=>{if(!es[0].isIntersecting)return;o.disconnect();const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/1200);n.textContent=pre+Math.round(to*(1-Math.pow(1-p,3)))+suf;p<1&&requestAnimationFrame(f)})(t0)}).observe(n)})}
+let q=0;const go=()=>{q=0;scan();count()};
+new MutationObserver(()=>{q||(q=requestAnimationFrame(go))}).observe(document.getElementById("app")||document.body,{childList:true,subtree:true});go()})();
 </script></body></html>
